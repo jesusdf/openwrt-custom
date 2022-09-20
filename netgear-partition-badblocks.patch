@@ -1,0 +1,758 @@
+diff --git a/target/linux/ramips/dts/mt7621_netgear_sercomm_bzv.dtsi b/target/linux/ramips/dts/mt7621_netgear_sercomm_bzv.dtsi
+index eee6c535e1..19372dd926 100644
+--- a/target/linux/ramips/dts/mt7621_netgear_sercomm_bzv.dtsi
++++ b/target/linux/ramips/dts/mt7621_netgear_sercomm_bzv.dtsi
+@@ -109,48 +109,209 @@
+ 	status = "okay";
+ 
+ 	partitions {
+-		compatible = "fixed-partitions";
++		compatible = "sercomm,sc-partitions", "fixed-partitions";
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 
+ 		partition@0 {
+ 			label = "u-boot";
+ 			reg = <0x0 0x100000>;
++			scpart-id = <0>;
+ 			read-only;
+ 		};
+ 
+ 		partition@100000 {
+ 			label = "SC PART_MAP";
+ 			reg = <0x100000 0x100000>;
++			scpart-id = <1>;
+ 			read-only;
+ 		};
+ 
+ 		partition@200000 {
+ 			label = "kernel";
+ 			reg = <0x200000 0x400000>;
++			scpart-id = <2>;
+ 		};
+ 
+ 		partition@600000 {
+ 			label = "ubi";
+ 			reg = <0x600000 0x2800000>;
++			scpart-id = <3>;
+ 		};
+ 
+ 		partition@2e00000 {
+-			label = "reserved0";
+-			reg = <0x2e00000 0x1800000>;
++ 			label = "English UI";
++ 			reg = <0x2e00000 0x200000>;
++ 			scpart-id = <4>;
++ 			read-only;
++ 		};
++ 
++ 		partition@3000000 {
++ 			label = "ML1";
++ 			reg = <0x3000000 0x200000>;
++ 			scpart-id = <5>;
++ 			read-only;
++ 		};
++ 
++ 		partition@3200000 {
++ 			label = "ML2";
++ 			reg = <0x3200000 0x200000>;
++ 			scpart-id = <6>;
++ 			read-only;
++ 		};
++ 
++ 		partition@3400000 {
++ 			label = "ML3";
++ 			reg = <0x3400000 0x200000>;
++ 			scpart-id = <7>;
++ 			read-only;
++ 		};
++ 
++ 		partition@3600000 {
++ 			label = "ML4";
++ 			reg = <0x3600000 0x200000>;
++ 			scpart-id = <8>;
++ 			read-only;
++ 		};
++ 
++ 		partition@3800000 {
++ 			label = "ML5";
++ 			reg = <0x3800000 0x200000>;
++ 			scpart-id = <9>;
++ 			read-only;
++ 		};
++ 
++ 		partition@3a00000 {
++ 			label = "ML6";
++ 			reg = <0x3a00000 0x200000>;
++ 			scpart-id = <10>;
++ 			read-only;
++ 		};
++ 
++ 		partition@3c00000 {
++ 			label = "ML7";
++ 			reg = <0x3c00000 0x200000>;
++ 			scpart-id = <11>;
++ 			read-only;
++ 		};
++ 
++ 		partition@3e00000 {
++ 			label = "ML8";
++ 			reg = <0x3e00000 0x200000>;
++ 			scpart-id = <12>;
++ 			read-only;
++ 		};
++ 
++ 		partition@4000000 {
++ 			label = "ML9";
++ 			reg = <0x4000000 0x200000>;
++ 			scpart-id = <13>;
++ 			read-only;
++ 		};
++ 
++ 		partition@4200000 {
++ 			label = "ML10";
++ 			reg = <0x4200000 0x200000>;
++ 			scpart-id = <14>;
++ 			read-only;
++ 		};
++ 
++ 		partition@4400000 {
++ 			label = "ML11";
++ 			reg = <0x4400000 0x200000>;
++ 			scpart-id = <15>;
+ 			read-only;
+-		};
++ 		};
+ 
+ 		factory: partition@4600000 {
+ 			label = "factory";
+ 			reg = <0x4600000 0x200000>;
++			scpart-id = <16>;
+ 			read-only;
+ 		};
+ 
+-		partition@4800000 {
+-			label = "reserved1";
+-			reg = <0x4800000 0x3800000>;
+-			read-only;
+-		};
++ 		partition@4800000 {
++ 			label = "SC Private Data";
++ 			reg = <0x4800000 0x200000>;
++ 			scpart-id = <17>;
++ 			read-only;
++ 		};
++ 
++ 		partition@4a00000 {
++ 			label = "POT";
++ 			reg = <0x4a00000 0x200000>;
++ 			scpart-id = <18>;
++ 			read-only;
++ 		};
++ 
++ 		partition@4c00000 {
++ 			label = "Traffic Meter";
++ 			reg = <0x4c00000 0x200000>;
++ 			scpart-id = <19>;
++ 			read-only;
++ 		};
++ 
++ 		partition@4e00000 {
++ 			label = "SC PID";
++ 			reg = <0x4e00000 0x200000>;
++ 			scpart-id = <20>;
++ 			read-only;
++ 		};
++ 
++ 		partition@5000000 {
++ 			label = "SC Nvram";
++ 			reg = <0x5000000 0x200000>;
++ 			scpart-id = <21>;
++ 			read-only;
++ 		};
++ 
++ 		partition@5200000 {
++ 			label = "Ralink Nvram";
++ 			reg = <0x5200000 0x200000>;
++ 			scpart-id = <22>;
++ 			read-only;
++ 		};
++ 
++ 		partition@5400000 {
++ 			label = "reserved0";
++ 			reg = <0x5400000 0x200000>;
++ 			scpart-id = <23>;
++ 			read-only;
++ 		};
++ 
++ 		partition@5600000 {
++ 			label = "reserved1";
++ 			reg = <0x5600000 0x200000>;
++ 			scpart-id = <24>;
++ 			read-only;
++ 		};
++
++ 		partition@5800000 {
++ 			label = "reserved2";
++ 			reg = <0x5800000 0x200000>;
++ 			scpart-id = <25>;
++ 			read-only;
++ 		};
++
++ 		partition@5a00000 {
++ 			label = "reserved3";
++ 			reg = <0x5a00000 0x200000>;
++ 			scpart-id = <26>;
++ 			read-only;
++ 		};
++
++ 		partition@5c00000 {
++ 			label = "reserved4";
++ 			reg = <0x5c00000 0x200000>;
++ 			scpart-id = <27>;
++ 			read-only;
++ 		};
++
++ 		partition@5e00000 {
++ 			label = "reserved5";
++ 			reg = <0x5e00000 0x2180000>;
++ 			scpart-id = <28>;
++ 			read-only;
++ 		};
+ 	};
+ };
+diff --git a/target/linux/ramips/dts/mt7621_netgear_sercomm_chj.dtsi b/target/linux/ramips/dts/mt7621_netgear_sercomm_chj.dtsi
+index 0de2167e0a..eb9c5934e3 100644
+--- a/target/linux/ramips/dts/mt7621_netgear_sercomm_chj.dtsi
++++ b/target/linux/ramips/dts/mt7621_netgear_sercomm_chj.dtsi
+@@ -137,48 +137,209 @@
+ 	status = "okay";
+ 
+ 	partitions {
+-		compatible = "fixed-partitions";
++		compatible = "sercomm,sc-partitions", "fixed-partitions";
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 
+ 		partition@0 {
+ 			label = "u-boot";
+ 			reg = <0x0 0x100000>;
++			scpart-id = <0>;
+ 			read-only;
+ 		};
+ 
+ 		partition@100000 {
+ 			label = "SC PART_MAP";
+ 			reg = <0x100000 0x100000>;
++			scpart-id = <1>;
+ 			read-only;
+ 		};
+ 
+ 		partition@200000 {
+ 			label = "kernel";
+ 			reg = <0x200000 0x400000>;
++			scpart-id = <2>;
+ 		};
+ 
+ 		partition@600000 {
+ 			label = "ubi";
+ 			reg = <0x600000 0x2800000>;
++			scpart-id = <3>;
+ 		};
+ 
+ 		partition@2e00000 {
+-			label = "reserved0";
+-			reg = <0x2e00000 0x1800000>;
+-			read-only;
+-		};
+-
+-		factory: partition@4600000 {
+-			label = "factory";
+-			reg = <0x4600000 0x200000>;
+-			read-only;
+-		};
+-
+-		partition@4800000 {
+-			label = "reserved1";
+-			reg = <0x4800000 0x3800000>;
+-			read-only;
+-		};
++ 			label = "English UI";
++ 			reg = <0x2e00000 0x200000>;
++ 			scpart-id = <4>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@3000000 {
++ 			label = "ML1";
++ 			reg = <0x3000000 0x200000>;
++ 			scpart-id = <5>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@3200000 {
++ 			label = "ML2";
++ 			reg = <0x3200000 0x200000>;
++ 			scpart-id = <6>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@3400000 {
++ 			label = "ML3";
++ 			reg = <0x3400000 0x200000>;
++ 			scpart-id = <7>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@3600000 {
++ 			label = "ML4";
++ 			reg = <0x3600000 0x200000>;
++ 			scpart-id = <8>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@3800000 {
++ 			label = "ML5";
++ 			reg = <0x3800000 0x200000>;
++ 			scpart-id = <9>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@3a00000 {
++ 			label = "ML6";
++ 			reg = <0x3a00000 0x200000>;
++ 			scpart-id = <10>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@3c00000 {
++ 			label = "ML7";
++ 			reg = <0x3c00000 0x200000>;
++ 			scpart-id = <11>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@3e00000 {
++ 			label = "ML8";
++ 			reg = <0x3e00000 0x200000>;
++ 			scpart-id = <12>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@4000000 {
++ 			label = "ML9";
++ 			reg = <0x4000000 0x200000>;
++ 			scpart-id = <13>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@4200000 {
++ 			label = "ML10";
++ 			reg = <0x4200000 0x200000>;
++ 			scpart-id = <14>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@4400000 {
++ 			label = "ML11";
++ 			reg = <0x4400000 0x200000>;
++ 			scpart-id = <15>;
++ 			read-only;
++ 		};
++ 
++ 		factory:  partition@4600000 {
++ 			label = "factory";
++ 			reg = <0x4600000 0x200000>;
++ 			scpart-id = <16>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@4800000 {
++ 			label = "SC Private Data";
++ 			reg = <0x4800000 0x200000>;
++ 			scpart-id = <17>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@4a00000 {
++ 			label = "POT";
++ 			reg = <0x4a00000 0x200000>;
++ 			scpart-id = <18>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@4c00000 {
++ 			label = "Traffic Meter";
++ 			reg = <0x4c00000 0x200000>;
++ 			scpart-id = <19>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@4e00000 {
++ 			label = "SC PID";
++ 			reg = <0x4e00000 0x200000>;
++ 			scpart-id = <20>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@5000000 {
++ 			label = "SC Nvram";
++ 			reg = <0x5000000 0x200000>;
++ 			scpart-id = <21>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@5200000 {
++ 			label = "Ralink Nvram";
++ 			reg = <0x5200000 0x200000>;
++ 			scpart-id = <22>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@5400000 {
++ 			label = "reserved0";
++ 			reg = <0x5400000 0x200000>;
++ 			scpart-id = <23>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@5600000 {
++ 			label = "reserved1";
++ 			reg = <0x5600000 0x200000>;
++ 			scpart-id = <24>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@5800000 {
++ 			label = "reserved2";
++ 			reg = <0x5800000 0x200000>;
++ 			scpart-id = <25>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@5a00000 {
++ 			label = "reserved3";
++ 			reg = <0x5a00000 0x200000>;
++ 			scpart-id = <26>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@5c00000 {
++ 			label = "reserved4";
++ 			reg = <0x5c00000 0x200000>;
++ 			scpart-id = <27>;
++ 			read-only;
++ 		};
++ 
++ 		 partition@5e00000 {
++ 			label = "reserved5";
++ 			reg = <0x5e00000 0x2180000>;
++ 			scpart-id = <28>;
++ 			read-only;
++ 		};
+ 	};
+ };
+diff --git a/target/linux/ramips/files/drivers/mtd/parsers/scpart.c b/target/linux/ramips/files/drivers/mtd/parsers/scpart.c
+new file mode 100644
+index 0000000000..72acc145be
+--- /dev/null
++++ b/target/linux/ramips/files/drivers/mtd/parsers/scpart.c
+@@ -0,0 +1,257 @@
++/*
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
++ *
++ * Sercomm/Netgear FLASH partition table.
++ */
++
++
++#include <linux/kernel.h>
++#include <linux/slab.h>
++#include <linux/mtd/mtd.h>
++#include <linux/mtd/partitions.h>
++#include <linux/module.h>
++
++
++#define	MOD_NAME	"scpart"
++
++static const char sc_part_magic[] = {
++	'S', 'C', 'F', 'L', 'M', 'A', 'P', 'O', 'K', '\0',
++};
++#define	PART_MAGIC_LEN	sizeof(sc_part_magic)
++
++/* assumes that all fields are set by CPU native endian */
++struct sc_part_desc {
++	uint32_t	part_id;
++	uint32_t	part_offs;
++	uint32_t	part_bytes;
++};
++#define	ID_ALREADY_FOUND	(0xFFFFFFFFUL)
++
++#define	MAP_OFFS_IN_BLK	(0x800)
++
++#define	MAP_MIRROR_NUM	(2)
++
++static int scpart_desc_is_valid(struct sc_part_desc *pdesc)
++{
++	return !!((pdesc->part_id != 0xFFFFFFFFUL) &&
++			(pdesc->part_offs != 0xFFFFFFFFUL) &&
++			(pdesc->part_bytes != 0xFFFFFFFFUL));
++}
++
++static int scpart_scan_partmap(struct mtd_info *master, loff_t partmap_offs,
++				struct sc_part_desc **ppdesc)
++{
++	uint8_t *buf;
++	loff_t offs;
++	size_t retlen;
++	struct sc_part_desc *pdesc = NULL;
++	struct sc_part_desc *tmpdesc;
++	int cnt = 0;
++	int res2;
++	int res = 0;
++
++	buf = kzalloc(master->erasesize, GFP_KERNEL);
++	if (!buf) {
++		res = -ENOMEM;
++		goto out;
++	}
++
++	res2 = mtd_read(master, partmap_offs, master->erasesize, &retlen, buf);
++	if (res2 || (retlen != master->erasesize)) {
++		res = -EIO;
++		goto free;
++	}
++
++	offs = MAP_OFFS_IN_BLK;
++	while((offs + sizeof(*tmpdesc)) < master->erasesize) {
++		tmpdesc = (struct sc_part_desc*)&(buf[offs]);
++		if (!scpart_desc_is_valid(tmpdesc))
++			break;
++		cnt++;
++		offs += sizeof(*tmpdesc);
++	}
++
++	if (cnt > 0) {
++		int bytes = cnt * sizeof(*pdesc);
++
++		pdesc = kzalloc(bytes, GFP_KERNEL);
++		if (!pdesc) {
++			res = -ENOMEM;
++			goto free;
++		}
++		memcpy(pdesc, &(buf[MAP_OFFS_IN_BLK]), bytes);
++
++		*ppdesc = pdesc;
++		res = cnt;
++	}
++
++  free:
++	kfree(buf);
++
++  out:
++	return res;
++}
++
++static int scpart_find_partmap(struct mtd_info *master,
++				struct sc_part_desc **ppdesc)
++{
++	loff_t offs;
++	uint8_t rdbuf[PART_MAGIC_LEN];
++	size_t retlen;
++	int magic_found = 0;
++	int res2;
++	int res = 0;
++
++	offs = 0;
++	while((magic_found < MAP_MIRROR_NUM) &&
++			(offs < master->size) && !mtd_block_isbad(master, offs)) {
++		res2 = mtd_read(master, offs, PART_MAGIC_LEN, &retlen, rdbuf);
++		if (res2 || (retlen != PART_MAGIC_LEN)) {
++			res = -EIO;
++			goto out;
++		}
++		if (!memcmp(rdbuf, sc_part_magic, PART_MAGIC_LEN)) {
++			pr_debug("%s: signature found at 0x%llx\n", MOD_NAME, offs);
++			magic_found++;
++			res = scpart_scan_partmap(master, offs, ppdesc);
++			if (res > 0)
++				goto out;
++		}
++		offs += master->erasesize;
++	}
++
++  out:
++	if (res > 0)
++		pr_info("%s: valid 'SC PART MAP' found (%d partitions)\n", MOD_NAME, res);
++	else
++		pr_info("%s: no valid 'SC PART MAP'\n", MOD_NAME);
++
++	return res;
++}
++
++static int scpart_parse(struct mtd_info *master,
++			const struct mtd_partition **pparts,
++			struct mtd_part_parser_data *data)
++{
++	struct sc_part_desc *scpart_map = NULL;
++	struct mtd_partition *parts = NULL;
++	struct device_node *mtd_node;
++	struct device_node *ofpart_node;
++	struct device_node *pp;
++	const char *partname;
++	int nr_scparts;
++	int nr_parts = 0;
++	int n;
++	int res = 0;
++
++	mtd_node = mtd_get_of_node(master);
++	if (!mtd_node)
++		goto out;
++
++	ofpart_node = of_get_child_by_name(mtd_node, "partitions");
++	if (!ofpart_node)
++		goto out;
++
++	nr_scparts = scpart_find_partmap(master, &scpart_map);
++	if (nr_scparts <= 0) {
++		res = nr_scparts;
++		goto free;
++	}
++
++	for_each_child_of_node(ofpart_node, pp) {
++		u32 scpart_id;
++		struct mtd_partition *parts_tmp;
++
++		if(of_property_read_u32(pp, "scpart-id", &scpart_id))
++			continue;
++
++		for (n = 0 ; n < nr_scparts ; n++)
++			if ((scpart_map[n].part_id != ID_ALREADY_FOUND) &&
++					(scpart_id == scpart_map[n].part_id))
++				break;
++		if (n >= nr_scparts)
++			/* not match */
++			continue;
++
++		/* add the partition found in OF into MTD partition array */
++
++		/* reallocate partition array */
++		parts_tmp = parts;
++		parts = kzalloc((nr_parts + 1) * sizeof(*parts), GFP_KERNEL);
++		if (!parts) {
++			kfree(parts_tmp);
++			res = -ENOMEM;
++			goto free;
++		}
++		if (parts_tmp) {
++			memcpy(parts, parts_tmp, nr_parts * sizeof(*parts));
++			kfree(parts_tmp);
++		}
++
++		parts[nr_parts].offset = scpart_map[n].part_offs;
++		parts[nr_parts].size = scpart_map[n].part_bytes;
++		parts[nr_parts].of_node = pp;
++
++		if (!of_property_read_string(pp, "label", &partname) ||
++				!of_property_read_string(pp, "name", &partname))
++			parts[nr_parts].name = partname;
++
++		if (of_property_read_bool(pp, "read-only"))
++			parts[nr_parts].mask_flags |= MTD_WRITEABLE;
++		if (of_property_read_bool(pp, "lock"))
++			parts[nr_parts].mask_flags |= MTD_POWERUP_LOCK;
++
++		/* mark as 'done' */
++		scpart_map[n].part_id = ID_ALREADY_FOUND;
++
++		nr_parts++;
++	}
++	if (nr_parts > 0) {
++		*pparts = parts;
++		res = nr_parts;
++	} else
++		pr_info("%s: No partition in OF matches partition ID with 'SC PART MAP'.\n",
++				MOD_NAME);
++
++	of_node_put(pp);
++
++  free:
++	kfree(scpart_map);
++	if (res <= 0)
++		kfree(parts);
++
++  out:
++	return res;
++}
++
++static const struct of_device_id scpart_parser_of_match_table[] = {
++	{ .compatible = "sercomm,sc-partitions" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, scpart_parser_of_match_table);
++
++static struct mtd_part_parser scpart_parser = {
++	.parse_fn = scpart_parse,
++	.name = "scpart",
++	.of_match_table = scpart_parser_of_match_table,
++};
++module_mtd_part_parser(scpart_parser);
++
++/* mtd parsers will request the module by parser name */
++MODULE_ALIAS("scpart");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("NOGUCHI Hiroshi <drvlabo at gmail.com>");
++MODULE_DESCRIPTION("Parsing code for Sercomm/Netgear partition table");
+diff --git a/target/linux/ramips/mt7621/config-5.10 b/target/linux/ramips/mt7621/config-5.10
+index b4c8ab1f1c..050a47a3d2 100644
+--- a/target/linux/ramips/mt7621/config-5.10
++++ b/target/linux/ramips/mt7621/config-5.10
+@@ -202,6 +202,7 @@ CONFIG_MODULES_USE_ELF_REL=y
+ CONFIG_MT7621_WDT=y
+ # CONFIG_MTD_CFI_INTELEXT is not set
+ CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_SERCOMM_PARTS=y
+ CONFIG_MTD_NAND_CORE=y
+ CONFIG_MTD_NAND_ECC_SW_HAMMING=y
+ CONFIG_MTD_NAND_MT7621=y
+diff --git a/target/linux/ramips/patches-5.10/303-mtd-scpart-parser.patch b/target/linux/ramips/patches-5.10/303-mtd-scpart-parser.patch
+new file mode 100644
+index 0000000000..f125d9c6af
+--- /dev/null
++++ b/target/linux/ramips/patches-5.10/303-mtd-scpart-parser.patch
+@@ -0,0 +1,20 @@
++--- a/drivers/mtd/parsers/Kconfig
+++++ b/drivers/mtd/parsers/Kconfig
++@@ -1,4 +1,10 @@
++ # SPDX-License-Identifier: GPL-2.0-only
+++config MTD_SERCOMM_PARTS
+++	tristate "SERCOMM partitioning information support"
+++	depends on MTD_OF_PARTS
+++	help
+++	  This provides partition table parser for SERCOMM partition map
+++
++ config MTD_AR7_PARTS
++ 	tristate "TI AR7 partitioning parser"
++ 	help
++--- a/drivers/mtd/parsers/Makefile
+++++ b/drivers/mtd/parsers/Makefile
++@@ -13,3 +13,4 @@
++ obj-$(CONFIG_MTD_PARSER_TRX)		+= parser_trx.o
++ obj-$(CONFIG_MTD_SHARPSL_PARTS)		+= sharpslpart.o
++ obj-$(CONFIG_MTD_REDBOOT_PARTS)		+= redboot.o
+++obj-$(CONFIG_MTD_SERCOMM_PARTS)		+= scpart.o
+-- 
+2.25.1
+
