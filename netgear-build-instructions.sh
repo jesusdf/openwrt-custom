@@ -10,12 +10,17 @@ cd openwrt
 git checkout f4ca4187cde01a3e412f10657bec0790d3a4cd94
 ./scripts/feeds update -a
 ./scripts/feeds install -a
+make -j12 menuconfig
+# Exit without saving
 cat netgear-partition-badblocks.patch | patch -p1
+# For Netgear WAC124
 cp netgear-wac124-openwrt-config .config
+# For Netgear R6260
+cp netgear-r6260-openwrt-config .config
 make -j12 menuconfig
 # Ensure that the custom packages are selected (like ntpclient on Network\Time Synchronization) and continue with the kernel compilation:
 make -j12 kernel_menuconfig
-cp netgear-wac124-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-5.10.143/.config
+cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-5.10.143/.config
 make -j12 kernel_menuconfig
 # Ensure that the following options in the kernel configuration, and save it:
 # <*> General setup\Kernel .config support

@@ -1,19 +1,38 @@
 # OpenWRT firmware for Netgear WAC124 with badblocks
 
-There are some issues with this router if the memory reports badblocks, as the mtd partition table gets shifted and the device cannot boot or report misleading hardware information.
+There are some issues with this router if the memory reports badblocks. The mtd partition table is defined in upstream as fixed offsets. When there are badblocks present, the base addresses get shifted, and the device cannot boot, or boots but reports misleading hardware information.
 
-Two years ago, [I reported that behaviour on the OpenWRT forums](https://forum.openwrt.org/t/strange-behaviour-on-5g-wifi-with-netgear-wac124/74771) and got a hint that [there was a patch to dynamically configure the mtd partition](http://lists.infradead.org/pipermail/openwrt-devel/2020-June/029857.html ). That patch fixed my issues.
+Two years ago, [I reported that behaviour on the OpenWRT forums](https://forum.openwrt.org/t/strange-behaviour-on-5g-wifi-with-netgear-wac124/74771) and got a hint that [there was a patch to dynamically configure the mtd partition table](http://lists.infradead.org/pipermail/openwrt-devel/2020-June/029857.html ). That patch fixed my issues.
 
-Two years later, I tried to update the firmware to the latest version and no image could boot. I proceed to update that old patch to be able to work with the latest OpenWRT version, and here we are.
+Recently, I tried to update the firmware to the latest version. Despite of using the prebuilt binaries or my own ones, the router was stuck in a boot loop (it didn't start the fast blinking led sequence, so the kernel was not properly booted).
 
-This patch also worked fine with my Netgear R6260 (also with badblocks), which is almost the same router. It should work with other routers from the same family/era, as the Netgear R7000 (untested).
+I did some troubleshooting building a smaller kernel with just the bare minimum but it failed too.
 
-For reference, here's an extract of the booting process showing the badblocks and recalculated mtd partitions:
+[I updated that old patch to work with the latest version of OpenWRT](https://github.com/jesusdf/openwrt-custom/blob/main/netgear-partition-badblocks.patch), and it booted fine.
+
+I tought that the badblocks patch was already in upstream, but it seems that it's not. The mtd is still defined as fixed offsets.
+
+This patch also works with my Netgear R6260 (that it also happens to have badblocks), which is almost the same router, with just a different target in the build configuration. It should work fine with other routers from the same family/era, as the Netgear R7000 (untested).
+
+For reference, these are the fixed partitions defined in upstream:
 
 ```
-[    0.945145] mt7621-nand 1e003000.nand: ECC strength adjusted to 4 bits
-[    0.958192] mt7621-nand 1e003000.nand: Using programmed access timing: 21005134
-[    0.972748] mt7621-nand 1e003000.nand: Using programmed access timing: 21005134
+[    1.011099] Scanning device for bad blocks
+[    1.517170] Bad eraseblock 393 at 0x000003120000
+[    2.323428] 7 fixed-partitions partitions found on MTD device mt7621-nand
+[    2.336949] Creating 7 MTD partitions on "mt7621-nand":
+[    2.347360] 0x000000000000-0x000000100000 : "u-boot"
+[    2.358704] 0x000000100000-0x000000200000 : "SC PART_MAP"
+[    2.370774] 0x000000200000-0x000000600000 : "kernel"
+[    2.382122] 0x000000600000-0x000002e00000 : "ubi"
+[    2.392997] 0x000002e00000-0x000004600000 : "reserved0"
+[    2.404913] 0x000004600000-0x000004800000 : "factory"
+[    2.416306] 0x000004800000-0x000008000000 : "reserved1"
+```
+
+And these are the dynamic partitions detected by the patch:
+
+```
 [    0.987317] Scanning device for bad blocks
 [    1.031536] Bad eraseblock 28 at 0x000000380000
 [    1.153831] Bad eraseblock 118 at 0x000000ec0000
@@ -49,9 +68,6 @@ For reference, here's an extract of the booting process showing the badblocks an
 [    2.678492] 0x000005a40000-0x000005c40000 : "reserved3"
 [    2.690036] 0x000005c40000-0x000005e40000 : "reserved4"
 [    2.701590] 0x000005e40000-0x000007f80000 : "reserved5"
-[    2.714674] libphy: Fixed MDIO Bus: probed
-[    2.748563] libphy: mdio: probed
-[    2.755251] mt7530 mdio-bus:1f: MT7530 adapts as multi-chip module
 ```
 
 Install build dependencies
@@ -93,7 +109,12 @@ Configure the firmware image and the kernel
 
 Run the following commands as a normal user, never as root:
 ```
+make -j12 menuconfig
+# Exit without saving
+# For Netgear WAC124
 cp netgear-wac124-openwrt-config .config
+# For Netgear R6260
+cp netgear-r6260-openwrt-config .config
 make -j12 menuconfig
 ```
 
@@ -101,7 +122,7 @@ Ensure that the custom packages are selected (like ntpclient on Network\Time Syn
 
 ```
 make -j12 kernel_menuconfig
-cp netgear-wac124-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-5.10.143/.config
+cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-5.10.143/.config
 make -j12 kernel_menuconfig
 ```
 
