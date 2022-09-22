@@ -1,5 +1,12 @@
 # OpenWRT firmware for Netgear WAC124 with badblocks
 
+Related pull requests
+----
+https://github.com/openwrt/openwrt/pull/10038
+
+History
+----
+
 There are some issues with this router if the memory reports badblocks. The mtd partition table is defined in upstream as fixed offsets. When there are badblocks present, the base addresses get shifted, and the device cannot boot, or boots but reports misleading hardware information.
 
 Two years ago, [I reported that behaviour on the OpenWRT forums](https://forum.openwrt.org/t/strange-behaviour-on-5g-wifi-with-netgear-wac124/74771) and got a hint that [there was a patch to dynamically configure the mtd partition table](http://lists.infradead.org/pipermail/openwrt-devel/2020-June/029857.html ). That patch fixed my issues.
