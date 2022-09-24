@@ -91,6 +91,7 @@ git clone https://github.com/jesusdf/openwrt-custom.git
 cd openwrt-custom
 git clone https://git.openwrt.org/openwrt/openwrt.git
 cp netgear* openwrt/
+cp 901-staging-mt7621-pci-delay-for-properly-detect.patch openwrt/target/linux/ramips/patches-5.10/
 rm openwrt/target/linux/generic/backport-*/411-*-mtd-parsers-add-support-for-Sercomm-partitions.patch
 rm openwrt/target/linux/generic/pending-*/435-mtd-add-routerbootpart-parser-config.patch
 cd openwrt
@@ -125,7 +126,7 @@ cp netgear-r6260-openwrt-config .config
 make -j12 menuconfig
 ```
 
-Ensure that the custom packages are selected (like ntpclient on Network\Time Synchronization) and continue with the kernel compilation:
+Ensure that the custom packages are selected (like ntpdate on Network\Time Synchronization) and continue with the kernel compilation:
 
 ```
 make -j12 kernel_menuconfig
