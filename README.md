@@ -91,12 +91,9 @@ git clone https://github.com/jesusdf/openwrt-custom.git
 cd openwrt-custom
 git clone https://git.openwrt.org/openwrt/openwrt.git
 cp netgear* openwrt/
-cp 901-staging-mt7621-pci-delay-for-properly-detect.patch openwrt/target/linux/ramips/patches-5.10/
-rm openwrt/target/linux/generic/backport-*/411-*-mtd-parsers-add-support-for-Sercomm-partitions.patch
-rm openwrt/target/linux/generic/pending-*/435-mtd-add-routerbootpart-parser-config.patch
 cd openwrt
-# Latest commit when this repository was built: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=f4ca4187cde01a3e412f10657bec0790d3a4cd94
-git checkout f4ca4187cde01a3e412f10657bec0790d3a4cd94
+# Latest commit when this repository was built: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=4e5d45f1e6cbc0cfd6018d6dddaa9997067cad09
+git checkout 4e5d45f1e6cbc0cfd6018d6dddaa9997067cad09
 ```
 
 Update the feeds
@@ -108,8 +105,10 @@ Update the feeds
 
 Apply the partition patch
 ----
+Patch is already upstream, this is not needed anymore:
+https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=77692d6112074f969170ec3c9b353df6565bc1c3
 ```
-cat netgear-partition-badblocks.patch | patch -p1
+# cat netgear-partition-badblocks.patch | patch -p1
 ```
 
 Configure the firmware image and the kernel
@@ -130,11 +129,12 @@ Ensure that the custom packages are selected (like ntpdate on Network\Time Synch
 
 ```
 make -j12 kernel_menuconfig
-cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-5.10.143/.config
+# Exit without saving
+cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-5.15.135/.config
 make -j12 kernel_menuconfig
 ```
 
-Ensure that the following options in the kernel configuration, and save it:
+Ensure that the following options are selected in the kernel configuration, and save it:
 ```
 <*> General setup\Kernel .config support
 [*] General setup\Enable access to .config through /proc/config.gz
@@ -145,7 +145,8 @@ Build the firmware image
 ----
 
 ```
-make -j12 defconfig download clean world
+make -j12 defconfig download clean world && cd bin/targets/ramips/mt7621 && ls
 ```
 
+If it works, the built image and packages will be located in the bin folder.
 If it fails, add the following parameter to have a verbose output: V=sc
