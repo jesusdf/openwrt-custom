@@ -92,8 +92,8 @@ cd openwrt-custom
 git clone https://git.openwrt.org/openwrt/openwrt.git
 cp netgear* openwrt/
 cd openwrt
-# Latest commit when this repository was built: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=4e5d45f1e6cbc0cfd6018d6dddaa9997067cad09
-git checkout 4e5d45f1e6cbc0cfd6018d6dddaa9997067cad09
+# Latest commit when this repository was built: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=f4fdb9964a1add146e0efdeba864a6478212a9fa
+git checkout f4fdb9964a1add146e0efdeba864a6478212a9fa
 ```
 
 Update the feeds
@@ -116,22 +116,22 @@ Configure the firmware image and the kernel
 
 Run the following commands as a normal user, never as root:
 ```
-make -j12 menuconfig
+make -j$(getconf _NPROCESSORS_ONLN) menuconfig
 # Exit without saving
 # For Netgear WAC124
 cp netgear-wac124-openwrt-config .config
 # For Netgear R6260
 cp netgear-r6260-openwrt-config .config
-make -j12 menuconfig
+make -j$(getconf _NPROCESSORS_ONLN) menuconfig
 ```
 
 Ensure that the custom packages are selected (like ntpdate on Network\Time Synchronization) and continue with the kernel compilation:
 
 ```
-make -j12 kernel_menuconfig
+make -j$(getconf _NPROCESSORS_ONLN) kernel_menuconfig
 # Exit without saving
 cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-5.15.135/.config
-make -j12 kernel_menuconfig
+make -j$(getconf _NPROCESSORS_ONLN) kernel_menuconfig
 ```
 
 Ensure that the following options are selected in the kernel configuration, and save it:
@@ -145,7 +145,7 @@ Build the firmware image
 ----
 
 ```
-make -j12 defconfig download clean world && cd bin/targets/ramips/mt7621 && ls
+make -j$(getconf _NPROCESSORS_ONLN) defconfig download clean world && cd bin/targets/ramips/mt7621 && ls
 ```
 
 If it works, the built image and packages will be located in the bin folder.
