@@ -130,7 +130,7 @@ Ensure that the custom packages are selected (like ntpdate on Network\Time Synch
 ```
 make -j$(getconf _NPROCESSORS_ONLN) kernel_menuconfig
 # Exit without saving
-cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-5.15.135/.config
+cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-6.12.63/.config
 make -j$(getconf _NPROCESSORS_ONLN) kernel_menuconfig
 ```
 
