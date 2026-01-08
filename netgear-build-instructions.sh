@@ -11,6 +11,8 @@ cd openwrt
 git checkout 4dd2e6ec5b81becd32dc25d85d977510d363a419
 ./scripts/feeds update -a
 ./scripts/feeds install -a
+unset CFLAGS
+unset CXXFLAGS
 make -j$(getconf _NPROCESSORS_ONLN) menuconfig
 # Exit without saving
 # Patch is already upstream, this is not needed anymore:
@@ -26,6 +28,11 @@ make -j$(getconf _NPROCESSORS_ONLN) menuconfig
 make -j$(getconf _NPROCESSORS_ONLN) kernel_menuconfig
 # Exit without saving
 cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-6.12.63/.config
+# FIXME: Dirty hack to bypass a compilation error in the strongswan package
+mkdir -p build_dir/target-mipsel_24kc_musl/strongswan-6.0.3/ipkg-install/etc/
+mkdir -p build_dir/target-mipsel_24kc_musl/strongswan-6.0.3/ipkg-install/usr/sbin/
+touch build_dir/target-mipsel_24kc_musl/strongswan-6.0.3/ipkg-install/etc/ipsec.conf
+touch build_dir/target-mipsel_24kc_musl/strongswan-6.0.3/ipkg-install/usr/sbin/ipsec
 make -j$(getconf _NPROCESSORS_ONLN) kernel_menuconfig
 # Ensure that the following options are selected in the kernel configuration, and save it:
 # <*> General setup\Kernel .config support
