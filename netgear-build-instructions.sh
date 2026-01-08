@@ -7,8 +7,8 @@ cp netgear* openwrt/
 #rm openwrt/target/linux/generic/backport-*/411-*-mtd-parsers-add-support-for-Sercomm-partitions.patch
 #rm openwrt/target/linux/generic/pending-*/435-mtd-add-routerbootpart-parser-config.patch
 cd openwrt
-# Latest commit when this repository was built: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=f4fdb9964a1add146e0efdeba864a6478212a9fa
-git checkout f4fdb9964a1add146e0efdeba864a6478212a9fa
+# Latest commit when this repository was built: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commit;h=4dd2e6ec5b81becd32dc25d85d977510d363a419
+git checkout 4dd2e6ec5b81becd32dc25d85d977510d363a419
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 make -j$(getconf _NPROCESSORS_ONLN) menuconfig
