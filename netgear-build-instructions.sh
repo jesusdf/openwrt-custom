@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo apt update
-sudo apt install build-essential gawk gcc-multilib flex git gettext libncurses5-dev libssl-dev python3-distutils rsync unzip zlib1g-dev clang
+sudo apt install build-essential gawk gcc-multilib flex git gettext libncurses5-dev libssl-dev devscripts intltool python3-distutils-extra rsync unzip zlib1g-dev clang python3-unidecode
 git clone https://git.openwrt.org/openwrt/openwrt.git
 cp netgear* openwrt/
 #cp 901-staging-mt7621-pci-delay-for-properly-detect.patch openwrt/target/linux/ramips/patches-5.15/
@@ -19,7 +19,7 @@ make -j$(getconf _NPROCESSORS_ONLN) menuconfig
 # For Netgear WAC124
 cp netgear-wac124-openwrt-config .config
 # For Netgear R6260
-cp netgear-r6260-openwrt-config .config
+#cp netgear-r6260-openwrt-config .config
 make -j$(getconf _NPROCESSORS_ONLN) menuconfig
 # Ensure that the custom packages are selected (like ntpdate on Network\Time Synchronization)
 # and continue with the kernel compilation:
