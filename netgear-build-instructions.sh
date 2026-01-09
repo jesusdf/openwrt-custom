@@ -28,11 +28,6 @@ make -j$(getconf _NPROCESSORS_ONLN) menuconfig
 make -j$(getconf _NPROCESSORS_ONLN) kernel_menuconfig
 # Exit without saving
 cp netgear-kernel-config build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/linux-6.12.63/.config
-# FIXME: Dirty hack to bypass a compilation error in the strongswan package
-mkdir -p build_dir/target-mipsel_24kc_musl/strongswan-6.0.3/ipkg-install/etc/
-mkdir -p build_dir/target-mipsel_24kc_musl/strongswan-6.0.3/ipkg-install/usr/sbin/
-touch build_dir/target-mipsel_24kc_musl/strongswan-6.0.3/ipkg-install/etc/ipsec.conf
-touch build_dir/target-mipsel_24kc_musl/strongswan-6.0.3/ipkg-install/usr/sbin/ipsec
 make -j$(getconf _NPROCESSORS_ONLN) kernel_menuconfig
 # Ensure that the following options are selected in the kernel configuration, and save it:
 # <*> General setup\Kernel .config support
