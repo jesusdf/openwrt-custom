@@ -7391,8 +7391,8 @@ CONFIG_RPCBIND_LIBWRAP=y
 CONFIG_RPCBIND_RMTCALLS=y
 # CONFIG_PACKAGE_rssileds is not set
 # CONFIG_PACKAGE_safe-search is not set
-# CONFIG_PACKAGE_samba4-admin is not set
-# CONFIG_PACKAGE_samba4-client is not set
+CONFIG_PACKAGE_samba4-admin=y
+CONFIG_PACKAGE_samba4-client=y
 CONFIG_PACKAGE_samba4-libs=y
 CONFIG_PACKAGE_samba4-server=y
 CONFIG_SAMBA4_SERVER_WSDD2=y
