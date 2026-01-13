@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo apt update
-sudo apt install build-essential gawk gcc-multilib flex git gettext libatomic\* libncurses5-dev libssl-dev devscripts intltool python3-distutils-extra rsync unzip zlib1g-dev clang python3-unidecode
+sudo apt install build-essential gawk gcc-multilib flex git gettext libatomic\* libncurses5-dev libssl-dev devscripts intltool python3-distutils-extra rsync unzip zlib1g-dev clang python3-unidecode heimdal-dev krb5-multidev heimdal-multidev
 git clone https://git.openwrt.org/openwrt/openwrt.git
 cp netgear* openwrt/
 #cp 901-staging-mt7621-pci-delay-for-properly-detect.patch openwrt/target/linux/ramips/patches-5.15/

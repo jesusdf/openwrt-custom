@@ -1,0 +1,8 @@
+WARNING: Image file build_dir/target-mipsel_24kc_musl/linux-ramips_mt7621/tmp/openwrt-ramips-mt7621-netgear_wac124-squashfs-rootfs.bin is too big: 54132736 > 41943040
+
+freeradius: 655360
+transmission: 1572864
+strongswan: 1048576
+smartmontools-database: 262144
+nmap: 5070151
+aircrack: 783646
