@@ -1,0 +1,153 @@
+name: Build OpenWrt
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build for ${{ matrix.device }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - device: wac124
+            config: netgear-wac124-openwrt-config
+          - device: r6260
+            config: netgear-r6260-openwrt-config
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential gawk gcc-multilib flex git gettext \
+            libncurses5-dev libssl-dev devscripts intltool \
+            python3-distutils-extra rsync unzip zlib1g-dev clang \
+            python3-unidecode
+
+      - name: Clone OpenWrt
+        run: |
+          git clone https://git.openwrt.org/openwrt/openwrt.git
+          cp netgear* openwrt/
+
+      - name: Checkout pinned OpenWrt commit
+        working-directory: openwrt
+        run: git checkout 4dd2e6ec5b81becd32dc25d85d977510d363a419
+
+      - name: Update and install feeds
+        working-directory: openwrt
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Apply device config
+        working-directory: openwrt
+        run: cp ${{ matrix.config }} .config
+
+      - name: Expand config (defconfig)
+        working-directory: openwrt
+        run: |
+          unset CFLAGS
+          unset CXXFLAGS
+          make defconfig
+
+      - name: Download package sources
+        working-directory: openwrt
+        run: make -j$(nproc) download
+
+      - name: Apply kernel config
+        working-directory: openwrt
+        run: |
+          LINUX_DIR=$(find build_dir -maxdepth 3 -name "linux-6.*" -type d 2>/dev/null | head -1)
+          if [ -n "$LINUX_DIR" ]; then
+            cp netgear-kernel-config "$LINUX_DIR/.config"
+            echo "Applied kernel config to $LINUX_DIR"
+          else
+            echo "Linux build dir not yet created, skipping kernel config copy (will be embedded in world build)"
+          fi
+
+      - name: Build
+        working-directory: openwrt
+        run: make -j$(nproc) world
+
+      - name: List built images
+        run: ls -lh openwrt/bin/targets/ramips/mt7621/
+
+      - name: Zip packages
+        run: |
+          zip -r openwrt-${{ matrix.device }}-packages.zip \
+            openwrt/bin/targets/ramips/mt7621/packages \
+            openwrt/bin/packages
+
+      - name: Upload images as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-${{ matrix.device }}
+          path: openwrt/bin/targets/ramips/mt7621/
+          retention-days: 7
+
+      - name: Upload packages as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-${{ matrix.device }}-packages
+          path: openwrt-${{ matrix.device }}-packages.zip
+          retention-days: 7
+
+  release:
+    name: Create release
+    runs-on: ubuntu-24.04
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download WAC124 artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: openwrt-wac124
+          path: release/wac124
+
+      - name: Download WAC124 packages
+        uses: actions/download-artifact@v4
+        with:
+          name: openwrt-wac124-packages
+          path: release/wac124
+
+      - name: Download R6260 artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: openwrt-r6260
+          path: release/r6260
+
+      - name: Download R6260 packages
+        uses: actions/download-artifact@v4
+        with:
+          name: openwrt-r6260-packages
+          path: release/r6260
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: OpenWrt ${{ github.ref_name }}
+          body: |
+            Automated OpenWrt build for Netgear WAC124 and R6260.
+
+            **OpenWrt commit:** `4dd2e6ec5b81becd32dc25d85d977510d363a419`
+            **Triggered by:** ${{ github.sha }}
+          files: |
+            release/wac124/*-factory.img
+            release/wac124/*-sysupgrade.bin
+            release/wac124/openwrt-wac124-packages.zip
+            release/r6260/*-factory.img
+            release/r6260/*-sysupgrade.bin
+            release/r6260/openwrt-r6260-packages.zip
+          fail_on_unmatched_files: false
